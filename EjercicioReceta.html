@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+</head>
+<body>
+<form action="https://lm.ciclo.iesnervion.es/" method="post">
+    <fieldset>
+        <legend>Receta</legend>
+        <label for="nombre">Nombre de la receta: </label>
+        <input name="nombre" id="nombre" type="text"><br><br>
+        <label for="email">Correo: </label>
+        <input id="correo" name="correo" type="email"><br><br>
+        <label for="momento[]">Momento para comer: </label>
+        <input name="momento[]" type="checkbox" value="desayuno"> Desayuno
+        <input name="momento[]" type="checkbox" value="almuerzo"> Almuerzo
+        <input name="momento[]" type="checkbox" value="merienda"> Merienda
+        <input name="momento[]" type="checkbox" value="cena">Cena<br><br>
+        <label for="ingredientes[]">Ingredientes: </label>
+        <select name="ingredientes[]" id="ingredientes" multiple>
+            <optgroup label="Carne">
+                <option>Pollo</option>
+                <option>Ternera</option>
+                <option>Cerdo</option>
+            </optgroup>
+            <optgroup label="Pescado">
+                <option>Plancha</option>
+                <option>Frito</option>
+            </optgroup>
+            <optgroup label="Verdura">
+            	<option>Lechuga</option>
+            	<option>Cebolla</option>
+            	<option>Zanahoria</option>
+            	<option>Espinaca</option>
+            </optgroup>
+            <optgroup label="Fruta">
+            	<option>Plátano</option>
+            	<option>Piña</option>
+            	<option>Manzana</option>
+            	<option>Kiwi</option>
+            </optgroup>
+        </select><br><br>
+        <label>Tiempo de preparación (Horas): </label>
+        <input name="horas" type="radio" value="0 hora"> 0
+        <input name="horas" type="radio" value="1 hora"> 1
+        <input name="horas" type="radio" value="2 horas"> 2<br><br>
+        <label>Tiempo de preparación (Minutos): </label>
+        <input name="minutos" type="radio" value="0 minutos"> 0
+        <input name="minutos" type="radio" value="15 minutos"> 15
+        <input name="minutos" type="radio" value="30 minutos"> 30
+        <input name="minutos" type="radio" value="45 minutos"> 45<br><br>
+    </fieldset>
+    <input type="submit" name="enviar" value="Enviar">
+</form>
+</body>
+</html>
