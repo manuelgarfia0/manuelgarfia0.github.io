@@ -6,15 +6,18 @@
     <title>Document</title>
 </head>
 <style>
-    table{
-        border: 1;
+    #t2{
+        border: 1px outset grey;
         width: 50%;
-        align-items: center;
+        margin: auto;
     }
-   
+    #t2 td{
+        border: 1px inset grey;
+        padding: 10px;
+    }
 </style>
 <body>
-    <table  id="t1" cellpadding="10px">
+    <table id="t1" border="1" width="50%" align="center" cellpadding="10px">
         <tr>
             <td>Tutoriales En Linea 1</td>
             <td>Tutoriales En Linea 2</td>
@@ -26,5 +29,47 @@
             <td>Tutoriales En Linea 3</td>
         </tr>
     </table>
+    <table id="t2">
+        <tr>
+            <td>Tutoriales En Linea 1</td>
+            <td>Tutoriales En Linea 2</td>
+            <td>Tutoriales En Linea 3</td>
+        </tr>
+        <tr>
+            <td>Tutoriales En Linea 1</td>
+            <td>Tutoriales En Linea 2</td>
+            <td>Tutoriales En Linea 3</td>
+        </tr>
+    </table>
+    <br>
+    <div class="tabla">
+        <div class="fila">
+            <div class="celda">Tutoriales en linea 1</div>
+            <div class="celda">Tutoriales en linea 2</div>
+            <div class="celda">Tutoriales en linea 3</div>
+        </div>
+        <div class="fila">
+            <div class="celda">Tutoriales en linea 1</div>
+            <div class="celda">Tutoriales en linea 2</div>
+            <div class="celda">Tutoriales en linea 3</div>
+        </div>
+    </div>
+    <style>
+        .tabla{
+            margin-left: 25%;
+            width: 50%;
+            border: 1px outset grey;
+        }
+        .fila{
+            display: block;
+        }
+        .celda{
+            display: inline-block;
+            margin: 1px;
+            padding: 10px;
+            border: 1px inset grey;
+            width: 30.5%;
+        }
+    </style>
 </body>
 </html>
