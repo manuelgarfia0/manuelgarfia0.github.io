@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #contenedor{
+        display: flex;
+        justify-content: center;
+    }
+    div{
+        font-size: 2em;
+        padding: 10px;
+    }
+    #c1{
+        flex-direction: row-reverse;
+    }
+    #c2{
+        flex-direction: column;
+    }
+    #c3{
+        flex-direction: column-reverse;
+    }
+</style>
+<body>
+    <div id= "c1" class="contenedor">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+    </div>
+    <div id= "c2" class="contenedor">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+    </div>
+    <div id= "c3" class="contenedor">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+    </div>
+
+    <div id="enlaces">
+        <a href="https://www.google.es/">Inicio</a>
+        <a href="https://www.google.es/">Sobre mí</a>
+        <a href="https://www.google.es/">Contacto</a>
+    </div>
+    <style>
+        #enlaces{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #007bff;
+            padding: 1rem;
+        }
+        #enlaces a{
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+
+    <div class="card-container">
+        <div class="card">Tarjeta 1</div>
+        <div class="card">Tarjeta 2</div>
+        <div class="card">Tarjeta 3</div>
+    </div>
+    <style>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .card {
+            flex: 1 1 30%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+
+    </style>
+  
+</body>
+</html>
