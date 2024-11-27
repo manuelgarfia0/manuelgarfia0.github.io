@@ -1,0 +1,40 @@
+body{
+    background-color: grey;
+    font-family: sans-serif;
+}
+nav img{
+    width: 50px;
+}
+article{
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+article img{
+    width: 100%;
+    align-items: center;
+}
+article a:hover{
+    color:aquamarine;
+}
+.Galería{
+    display: flex;
+    flex-flow: wrap;
+    justify-content: center;
+}
+  
+.Galería img{
+    width: 400px;
+    padding: 1rem;
+}
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 5px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
