@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ejercicio3</title>
+</head>
+<body>
+    <script>
+        console.log(saludar("Manuel"));
+        console.log(promedio(12, 18));
+        console.log(esPositivo(18));
+        console.log(bisiesto(2024));
+
+        function saludar(nombre){
+            return "Hola " + nombre;
+        }
+        function promedio(n1, n2){
+            return (n1+n2)/2;
+        }
+        function esPositivo(num){
+            return num > 0 ? "Positivo" : (num < 0) ? "Negativo" : "Cero";
+        }
+        function bisiesto(year){
+            return year % 4===0;
+        }
+    </script>
+</body>
+</html>
