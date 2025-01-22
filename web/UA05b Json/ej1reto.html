@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 1 (Reto): Creación Simple</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <table border>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Edad</th>
+            <th>Ciudad</th>
+        </tr>
+        <tr>
+            <td id=nombre></td>
+            <td id=apellido></td>
+            <td id=edad></td>
+            <td id=ciudad></td>
+        </tr>
+    </table>
+
+    <script>
+        // Función para serializar un objeto en formato JSON
+        function serializar(obj) {
+            return JSON.stringify(obj);
+        }
+
+        // Función para deserializar un JSON a un objeto
+        function deserializar(json) {
+            return JSON.parse(json);
+        }
+
+        // Objeto inicial con datos
+        const objeto = {
+            nombre: "Sarsisha",
+            apellido: "Franfur",
+            edad: 21,
+            ciudad: "Granada"
+        };
+
+        // Serialización y deserialización del objeto
+        const objeto_serializado = serializar(objeto);
+        console.log("Objeto Serializado:", objeto_serializado);
+
+        const objeto_deserializado = deserializar(objeto_serializado);
+        console.log("Objeto Deserializado:", objeto_deserializado);
+
+        // Insertar datos en las celdas de la tabla usando jQuery
+        $("#nombre").text(objeto_deserializado.nombre);
+        $("#apellido").text(objeto_deserializado.apellido);
+        $("#edad").text(objeto_deserializado.edad);
+        $("#ciudad").text(objeto_deserializado.ciudad);
+    </script>
+</body>
+</html>

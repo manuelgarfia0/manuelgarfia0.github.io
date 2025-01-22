@@ -7,84 +7,55 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h2>Introduce tus datos:</h2>
-    <form id="userForm">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required><br>
-
-        <label for="apellidos">Apellidos:</label>
-        <input type="text" id="apellidos" name="apellidos" required><br>
-
-        <label for="edad">Edad:</label>
-        <input type="number" id="edad" name="edad" required><br>
-
-        <label for="ciudad">Ciudad:</label>
-        <input type="text" id="ciudad" name="ciudad" required><br><br>
-
-        <button type="button" onclick="serializeObject()">Enviar</button>
-    </form> 
-
-    <h2>Tabla de datos:</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Apellidos</th>
-                <th>Edad</th>
-                <th>Ciudad</th>
-            </tr>
-        </thead>
-        <tbody id="dataBody">
-            <tr>
-                <td id="tableNombre">-</td>
-                <td id="tableApellidos">-</td>
-                <td id="tableEdad">-</td>
-                <td id="tableCiudad">-</td>
-            </tr>
-        </tbody>
+    <table border>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Edad</th>
+            <th>Ciudad</th>
+        </tr>
+        <tr>
+            <td id=nombre></td>
+            <td id=apellido></td>
+            <td id=edad></td>
+            <td id=ciudad></td>
+        </tr>
     </table>
 
     <script>
-        // Función para serializar el objeto a JSON
-        function serializeObject() {
-            // Recoger los valores del formulario
-            const nombre = $('#nombre').val();
-            const apellidos = $('#apellidos').val();
-            const edad = $('#edad').val();
-            const ciudad = $('#ciudad').val();
-
-            // Crear el objeto
-            const user = {
-                nombre: nombre,
-                apellidos: apellidos,
-                edad: parseInt(edad),
-                ciudad: ciudad
-            };
-
-            // Convertir el objeto a JSON
-            const jsonString = JSON.stringify(user);
-
-            // Mostrar el JSON en el HTML y consola
-            $('#jsonResult').text(jsonString);
-            console.log(jsonString);
-        }
-
-        // Función para deserializar el JSON a objeto
-        function deserializeJSON() {
-            const jsonString = $('#jsonResult').text();
-
-            // Convertir el JSON a objeto
-            const user = JSON.parse(jsonString);
-
-            // Insertar los datos en la tabla
-            $('#tableNombre').text(user.nombre);
-            $('#tableApellidos').text(user.apellidos);
-            $('#tableEdad').text(user.edad);
-            $('#tableCiudad').text(user.ciudad);
-
-            // Mostrar el objeto en consola
-            console.log("Objeto:", user);
-        }
+    function serializar(obj){
+        return JSON.stringify(obj);
+    }
+    function deserializar(obj){
+        return JSON.parse(obj)
+    }
+    const objeto = {
+        nombre: "Sarsisha",
+        apellido : "Franfur",
+        edad: 21,
+        ciudad : "Granada"
+    }
+    
+    $("#nombre").text(objeto.nombre);
+    $("#apellido").text(objeto.apellido);
+    $("#edad").text(objeto.edad);
+    $("#ciudad").text(objeto.ciudad);
+    const objeto_ser = serializar(objeto);
+    console.log(objeto_ser);
+    const obj_rec = deserializar(objeto_ser);
+    console.log(obj_rec);
+    $("#texto").text=texto;//Jquery
+    let objJson = {
+        nombre: $("#nombre").val(),     apellidos: $("#apellidos").val(),
+        edad: $("#edad").val(),     ciudad: $("#ciudad").val(),
+    };
+    // Objeto JavaScript a JSON
+    const json_serializado = serializar(objJson);
+    // JSON a objeto JavaScript
+    const objeto_recuperado = deserializar(json_serializado);
+    console.log(objJson);
+    console.log(json_serializado);
+    console.log(objeto_recuperado);
     </script>
 </body>
 </html>
