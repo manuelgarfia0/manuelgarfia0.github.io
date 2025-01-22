@@ -17,23 +17,23 @@
         <input id="ciudad" name="ciudad" type="text">
         <br>
         <label for="">Hobbies: </label>
-        <input id="deportes" name= "hobbies "type="checkbox">
+        <input id="deportes" name= "hobbies"type="checkbox">
         <label for="">Deportes</label>
-        <input id="lectura" name= "hobbies "type="checkbox">
+        <input id="lectura" name= "hobbies"type="checkbox">
         <label for="">Lectura</label>
-        <input id="música" name= "hobbies "type="checkbox">
+        <input id="música" name= "hobbies"type="checkbox">
         <label for="">Música</label>
-        <input id="juegos" name= "hobbies "type="checkbox">
+        <input id="juegos" name= "hobbies"type="checkbox">
         <label for="">Juegos</label>
-        <input id="cine" name= "hobbies "type="checkbox">
+        <input id="cine" name= "hobbies"type="checkbox">
         <label for="">Cine</label>
-        <input id="teatro" name= "hobbies "type="checkbox">
+        <input id="teatro" name= "hobbies"type="checkbox">
         <label for="">Teatro</label>
-        <input id="coleccionismo" name= "hobbies "type="checkbox">
+        <input id="coleccionismo" name= "hobbies"type="checkbox">
         <label for="">Coleccionismo</label>
-        <input id="bricolaje" name= "hobbies "type="checkbox">
+        <input id="bricolaje" name= "hobbies"type="checkbox">
         <label for="">Bricolaje</label>
-        <input id="cosplay" name= "hobbies "type="checkbox">
+        <input id="cosplay" name= "hobbies"type="checkbox">
         <label for="">Cosplay</label>
         <br>
         <button type="button" id="enviar">Enviar</button>
@@ -49,18 +49,17 @@
             let apellidos = $("#apellidos").val();
             let edad = $("#edad").val();
             let ciudad = $("#ciudad").val();
-            hobbies = $('input[name="hobbies"]')
-            .filter(':checked')
-            .map (function (){
-                return $(this).val();
-            }
-        ).get()
+            let hobbies = $('input[name="hobbies"]:checked')
+                .map(function () {
+                    return $(this).val();
+                })
+                .get();
             let obj = {
                 "nombre": nombre,
                 "apellidos": apellidos,
                 "edad": edad,
                 "ciudad": ciudad,
-                "hobbies": hobbies
+                "hobbies": hobbies.join(", ")
             }
             lista.push(obj);
             simulacro();
