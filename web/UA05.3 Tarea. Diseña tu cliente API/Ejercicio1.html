@@ -47,7 +47,7 @@
                     });
             }
             
-            function obtenerImagenRaza(raza) {
+            function obtenerImagen(raza) {
                 if (!raza) return;
                 fetch(`https://dog.ceo/api/breed/${raza}/images/random`)
                     .then(respuesta => respuesta.json())
@@ -57,7 +57,7 @@
             }
             
             botonAleatorio.addEventListener("click", obtenerPerroAleatorio);
-            selectorRaza.addEventListener("change", () => obtenerImagenRaza(selectorRaza.value));
+            selectorRaza.addEventListener("change", () => obtenerImagen(selectorRaza.value));
             
             obtenerRazas();
         });
