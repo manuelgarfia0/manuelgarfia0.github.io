@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 4: Envío y recepción</title>
+</head>
+<body>
+    <form>
+        <label>Nombre</label>
+        <input id="nombre" name="nombre" type="text">
+        <label>Apellidos</label>
+        <input id="apellidos" name="apellidos" type="text">
+        <label>Edad</label>
+        <input id="edad" name="edad" type="number">
+        <label>Ciudad</label>
+        <input id="ciudad" name="ciudad" type="text">
+        <br>
+        <label for="">Hobbies: </label>
+        <input id="deportes" name= "hobbies"type="checkbox">
+        <label for="">Deportes</label>
+        <input id="lectura" name= "hobbies"type="checkbox">
+        <label for="">Lectura</label>
+        <input id="música" name= "hobbies"type="checkbox">
+        <label for="">Música</label>
+        <input id="juegos" name= "hobbies"type="checkbox">
+        <label for="">Juegos</label>
+        <input id="cine" name= "hobbies"type="checkbox">
+        <label for="">Cine</label>
+        <input id="teatro" name= "hobbies"type="checkbox">
+        <label for="">Teatro</label>
+        <input id="coleccionismo" name= "hobbies"type="checkbox">
+        <label for="">Coleccionismo</label>
+        <input id="bricolaje" name= "hobbies"type="checkbox">
+        <label for="">Bricolaje</label>
+        <input id="cosplay" name= "hobbies"type="checkbox">
+        <label for="">Cosplay</label>
+        <br>
+        <button type="button" id="enviar" onclick="solicitud()">Enviar</button>
+    </form>
+    <div id="tabla"></div>
+    <div id="resultados"></div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        let lista = [];
+        //$('input:checkbox').on('change', function(){
+        //    let num = $('input:checkbox').filter(':checked').length
+        //    if(num>2){
+        //        $('input:checkbox').filter(':not(:checked)').prop(disabled, true);
+        //    }else{
+        //        $('input:checkbox').prop(disabled, false);
+        //    }
+        //})
+    
+        $("#enviar").click(function () {
+            let nombre = $("#nombre").val();
+            let apellidos = $("#apellidos").val();
+            let edad = $("#edad").val();
+            let ciudad = $("#ciudad").val();
+            let hobbies = $('input[name="hobbies"]:checked')
+                .map(function () {
+                    return $(this).val();
+                })
+                .get();
+            let obj = {
+                "nombre": nombre,
+                "apellidos": apellidos,
+                "edad": edad,
+                "ciudad": ciudad,
+                "hobbies": hobbies.join(", ")
+            }
+            lista.push(obj);
+            simulacro();
+        });
+    
+        function simulacro() {
+            let lista_serializada = serializar(lista);
+            let lista_NOserializada = deserializar(lista_serializada)
+            generaTabla(lista_NOserializada);
+        }
+    
+        function serializar(objeto) {
+            return JSON.stringify(objeto);
+        }
+    
+        function deserializar(objJson) {
+            return JSON.parse(objJson);
+        }
+    
+        function creaTabla() {
+            let tabla = "<table border='1' id='tabla_datos'>" +
+                "<thead>" +
+                "<tr>" +
+                "<th>Nombre</th>" +
+                "<th>Apellidos</th>" +
+                "<th>Edad</th>" +
+                "<th>Ciudad</th>" +
+                "<th>Hobbies</th>" +
+                "</tr>" +
+                "</thead>";
+            tabla += "<tbody id='cuerpo'></tbody>";
+            tabla += "</table>";
+            return tabla
+        }
+    
+        function nuevafila(obj, idObjeto) {
+            return "<tr id='" + idObjeto + "' onclick='eliminarTR(this.id)'><td>" + obj.nombre + "</td><td>" + obj.apellidos + "</td><td>" + obj.edad + "</td><td>" + obj.ciudad + "</td><td>" + obj.hobbies + "</td></tr>";
+        }
+    
+        function eliminarTR(idTR) {
+            lista.splice(idTR-1,1);
+            document.getElementById(idTR).remove();
+            simulacro();
+        }
+    
+        function generaTabla(lista) {
+            let tabla = creaTabla();
+            $("#tabla").html(tabla);
+    
+            let suma = 0;
+            let cont = 0;
+            let max = 0;
+            let min = 999;
+            console.log(lista);
+            lista.forEach(
+                function (elemento) {
+                    cont++;
+                    suma = suma + parseInt(elemento.edad);
+                    if (elemento.edad > max) {
+                        max = elemento.edad;
+                    }
+                    if (elemento.edad < min) {
+                        min = elemento.edad;
+                    }
+                    media = suma / cont;
+                    pSuma = "<p>Suma: " + suma + "</p>";
+                    pMedia = "<p>Media: " + media + "</p>";
+                    pMax = "<p>Max: " + max + "</p>";
+                    pMin = "<p>Min: " + min + "</p>";
+                    $("#resultados").html(pSuma + pMedia + pMax + pMin);
+                    $("#tabla_datos").append(nuevafila(elemento, cont));
+                }
+            )
+        }
+        function solicitud() { 
+            $.ajax({ 
+                url: "https://lm.iesnervion.es/eco.php", 
+                method: "GET", 
+                dataType: "json", // Convierte la respuesta a objeto JSON 
+                success: function(data) { //200 o 201
+                    console.log(data); 
+                }, 
+                error: function(xhr, status, error) { 
+                    console.log(`Error: ${xhr.status} - ${error}`); 
+                } 
+            });
+        }
+
+
+        function envio(objeto_js) {
+            $.ajax({
+                url: "https://lm.iesnervion.es/eco.php",
+                method: "POST",
+                data: JSON.stringify(objeto_js),
+                contentType: "application/json", // Especifica el tipo de contenido
+                dataType: "json", // La respuesta será interpretada como JSON
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    console.log(`Error: ${xhr.status} - ${error}`);
+                }
+            });
+        }
+
+        
+    </script>
+    </body>
+</html>
