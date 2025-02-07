@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 4: Reto</title>
+</head>
+<body>
+    <h2 style="font-family: arial;">Inserta los datos</h2>
+
+    <form>
+        <label for="descripcion">Descripción: </label>
+        <input id="decripcion"></input>
+
+        <label for="idProveedor">ID del proveedor: </label>
+        <input id="idProveedor"></input>
+
+        <label for="precio">Precio: </label>
+        <input id="precio"></input>
+
+        <br><br>
+
+        <button type="button" id="enviar" onclick="solicitud()">Enviar</button>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            const enviar = document.querySelector("#enviar");
+            enviar.addEventListener("click", cogerInfo);
+            let arrObj = [];
+
+            function fila(){
+                
+            }
+        })
+    </script>
+</body>
+</html>

@@ -157,15 +157,15 @@
         }
 
 
-        function envio(objeto_js) {
+        function envio() {
             $.ajax({
                 url: "https://lm.iesnervion.es/eco.php",
                 method: "POST",
-                data: JSON.stringify(objeto_js),
+                data: JSON.stringify(filas),
                 contentType: "application/json", // Especifica el tipo de contenido
                 dataType: "json", // La respuesta será interpretada como JSON
-                success: function(response) {
-                    console.log(response);
+                success: function(respuesta) {
+                    console.log(respuesta);
                 },
                 error: function(xhr, status, error) {
                     console.log(`Error: ${xhr.status} - ${error}`);
