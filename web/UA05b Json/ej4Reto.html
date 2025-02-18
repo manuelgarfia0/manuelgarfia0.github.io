@@ -4,87 +4,131 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ejercicio 4: Reto</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <h2 style="font-family: arial;">Inserta los datos</h2>
+    <h2 style="font-family: Arial, sans-serif;">Inserta los datos</h2>
 
     <form>
         <label for="descripcion">Descripción: </label>
-        <input id="descripcion"></input>
+        <input id="descripcion" required>
+        <br><br>
 
         <label for="idProveedor">ID del proveedor: </label>
-        <input id="idProveedor"></input>
+        <input id="idProveedor" required>
+        <br><br>
 
         <label for="precio">Precio: </label>
-        <input id="precio"></input>
-
+        <input id="precio" type="number" step="0.01" required>
         <br><br>
 
         <button id="enviar">Enviar</button>
-        <div id= "mensajeError"></div>
-        <table border id="objeto">
-            <tr>
-		
-            </tr>
-        </table>
+        <div id="mensajeError"></div>
     </form>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <table border id="objeto">
+        <thead>
+            <tr>
+                <th>Descripción</th>
+                <th>ID del Proveedor</th>
+                <th>Precio</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Las filas se agregarán dinámicamente aquí -->
+        </tbody>
+    </table>
+
     <script>
-        $(document).ready(function(){
-			const enviar= document.querySelector("#enviar");
-			enviar.addEventListener("click", cogerInfo);
-			let arrObj = [];
+        $(document).ready(function () {
+            const enviar = $("#enviar");
+            enviar.on("click", cogerInfo);
+            let arrObj = [];
 
-
-			function Fila(descripcion, idProveedor, precio){
-				if(descripcion.length < 255){
-					this.descripcion = descripcion;     	
-				}
-				this.idProveedor = idProveedor;
-
-				this.precio = Number.parseFloat(precio);
-			}
-
-
-			function cogerInfo(){
-                event.preventDefault();
-				let objJson = new Fila($("#descripcion").val(),     	
-					 $("#idProveedor").val(),
-					 $("#precio").val());
-
-				arrObj.push(objJson);
-				console.log(arrObj);
-				envio(objJson);
-			}
-                
-            enviar.addEventListener("click", cogerInfo);
-
-			function envio(objeto_js) {
-			    $.ajax({
-			        url: "https://lm.iesnervion.es/reto4.php",
-			        method: "POST",
-			        data: JSON.stringify(objeto_js),
-			        contentType: "application/json", // Especifica el tipo de contenido
-			        dataType: "json", // La respuesta será interpretada como JSON
-			        success: function(response) {
-			            console.log(response);
-			            controlarError(response.error);
-			        },
-			        error: function(xhr, status, error) {
-			            console.log(`Error: ${xhr.status} - ${error}`);
-			        }
-			    });
-			}
-			function controlarError(error){
-				const mensajeError = document.querySelector("#mensajeError");
-                mensajeError.innerHTML = ""; // Limpia el contenido anterior
-                const h2 = document.createElement("h2");
-                h2.style.color = "red";
-                h2.innerText = error;
-                mensajeError.appendChild(h2);
+            function Fila(descripcion, idProveedor, precio) {
+                if (descripcion.length < 255) {
+                    this.descripcion = descripcion;
+                } else {
+                    throw new Error("La descripción no puede superar los 255 caracteres.");
+                }
+                this.idProveedor = idProveedor;
+                this.precio = Number.parseFloat(precio);
             }
-		})
+
+            function cogerInfo(event) {
+                event.preventDefault(); // Previene el envío del formulario
+
+                const descripcion = $("#descripcion").val().trim();
+                const idProveedor = $("#idProveedor").val().trim();
+                const precio = $("#precio").val().trim();
+
+                // Validar campos
+                if (!descripcion || !idProveedor || !precio) {
+                    controlarError("Todos los campos son obligatorios.");
+                    return;
+                }
+
+                if (isNaN(precio)) {
+                    controlarError("El precio debe ser un número válido.");
+                    return;
+                }
+
+                try {
+                    const objJson = new Fila(descripcion, idProveedor, precio);
+                    arrObj.push(objJson);
+                    console.log(arrObj);
+                    envio(objJson);
+                    agregarFilaTabla(objJson); // Agregar fila a la tabla
+                    limpiarCampos(); // Limpiar campos del formulario
+                } catch (error) {
+                    controlarError(error.message);
+                }
+            }
+
+            function envio(objeto_js) {
+                $.ajax({
+                    url: "https://lm.iesnervion.es/reto4.php",
+                    method: "POST",
+                    data: JSON.stringify(objeto_js),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response);
+                        controlarError(response.error);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(`Error: ${xhr.status} - ${error}`);
+                        controlarError("Error al enviar los datos al servidor.");
+                    }
+                });
+            }
+
+            function controlarError(mensaje) {
+                const mensajeError = $("#mensajeError");
+                mensajeError.html(""); // Limpia el contenido anterior
+                const h2 = $("<h2>").addClass("error").text(mensaje);
+                mensajeError.append(h2);
+            }
+
+            function agregarFilaTabla(obj) {
+                const fila = `<tr>
+                                <td>${obj.descripcion}</td>
+                                <td>${obj.idProveedor}</td>
+                                <td>${obj.precio.toFixed(2)}</td>
+                              </tr>`;
+                $("#objeto tbody").append(fila);
+            }
+
+            function limpiarCampos() {
+                $("#descripcion, #idProveedor, #precio").val("");
+            }
+        });
     </script>
 </body>
 </html>

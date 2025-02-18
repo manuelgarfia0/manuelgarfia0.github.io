@@ -4,108 +4,126 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ejercicio 2 (Mega): Insertar datos dinámicos</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
     <form>
         <label>Nombre</label>
-        <input id="nombre" name="nombre" type="text">
+        <input id="nombre" name="nombre" type="text" required>
         <label>Apellidos</label>
-        <input id="apellidos" name="apellidos" type="text">
+        <input id="apellidos" name="apellidos" type="text" required>
         <label>Edad</label>
-        <input id="edad" name="edad" type="number">
+        <input id="edad" name="edad" type="number" required>
         <label>Ciudad</label>
-        <input id="ciudad" name="ciudad" type="text">
+        <input id="ciudad" name="ciudad" type="text" required>
         <button type="button" id="enviar">Enviar</button>
     </form>
     <div id="tabla"></div>
     <div id="resultados"></div>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
     <script>
-        lista = [];
-    
+        let lista = [];
+
+        // Evento para el botón "Enviar"
         $("#enviar").click(function () {
-            let nombre = $("#nombre").val();
-            let apellidos = $("#apellidos").val();
-            let edad = $("#edad").val();
-            let ciudad = $("#ciudad").val();
-            let obj = {
-                "nombre": nombre,
-                "apellidos": apellidos,
-                "edad": edad,
-                "ciudad": ciudad
+            const nombre = $("#nombre").val().trim();
+            const apellidos = $("#apellidos").val().trim();
+            const edad = parseInt($("#edad").val());
+            const ciudad = $("#ciudad").val().trim();
+
+            // Validar campos
+            if (nombre && apellidos && !isNaN(edad) && ciudad) {
+                const obj = {
+                    nombre: nombre,
+                    apellidos: apellidos,
+                    edad: edad,
+                    ciudad: ciudad
+                };
+                lista.push(obj);
+                simulacro();
+                $("#nombre, #apellidos, #edad, #ciudad").val(""); // Limpiar campos
+            } else {
+                alert("Por favor, completa todos los campos correctamente.");
             }
-            lista.push(obj);
-            simulacro();
         });
-    
+
+        // Serializar y deserializar la lista
         function simulacro() {
-            let lista_serializada = serializar(lista);
-            let lista_NOserializada = deserializar(lista_serializada)
-            generaTabla(lista_NOserializada);
+            const listaSerializada = serializar(lista);
+            const listaDeserializada = deserializar(listaSerializada);
+            generaTabla(listaDeserializada);
         }
-    
+
+        // Serializar un objeto a JSON
         function serializar(objeto) {
             return JSON.stringify(objeto);
         }
-    
+
+        // Deserializar un JSON a objeto
         function deserializar(objJson) {
-            return JSON.parse(objJson);
+            try {
+                return JSON.parse(objJson);
+            } catch (error) {
+                console.error("Error al deserializar JSON:", error);
+                return [];
+            }
         }
-    
+
+        // Crear la estructura de la tabla
         function creaTabla() {
-            let tabla = "<table border='1' id='tabla_datos'>" +
-                "<thead>" +
-                "<tr>" +
-                "<th>Nombre</th>" +
-                "<th>Apellidos</th>" +
-                "<th>Edad</th>" +
-                "<th>Ciudad</th>" +
-                "</tr>" +
-                "</thead>";
-            tabla += "<tbody id='cuerpo'></tbody>";
-            tabla += "</table>";
-            return tabla
+            return `<table border='1' id='tabla_datos'>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Apellidos</th>
+                                <th>Edad</th>
+                                <th>Ciudad</th>
+                            </tr>
+                        </thead>
+                        <tbody id='cuerpo'></tbody>
+                    </table>`;
         }
-    
+
+        // Generar una nueva fila para la tabla
         function nuevafila(obj, idObjeto) {
-            return "<tr id='" + idObjeto + "' onclick='eliminarTR(this.id)'><td>" + obj.nombre + "</td><td>" + obj.apellidos + "</td><td>" + obj.edad + "</td><td>" + obj.ciudad + "</td></tr>";
+            return `<tr id='${idObjeto}' onclick='eliminarTR(this.id)'>
+                        <td>${obj.nombre}</td>
+                        <td>${obj.apellidos}</td>
+                        <td>${obj.edad}</td>
+                        <td>${obj.ciudad}</td>
+                    </tr>`;
         }
-    
+
+        // Eliminar una fila de la tabla y de la lista
         function eliminarTR(idTR) {
-            lista.splice(idTR-1,1);
+            lista.splice(idTR - 1, 1);
             document.getElementById(idTR).remove();
             simulacro();
         }
-    
+
+        // Generar la tabla y calcular estadísticas
         function generaTabla(lista) {
-            let tabla = creaTabla();
-            $("#tabla").html(tabla);
-    
+            $("#tabla").html(creaTabla());
+
             let suma = 0;
-            let cont = 0;
-            let max = 0;
-            let min = 999;
-            console.log(lista);
-            lista.forEach(
-                function (elemento) {
-                    cont++;
-                    suma = suma + parseInt(elemento.edad);
-                    if (elemento.edad > max) {
-                        max = elemento.edad;
-                    }
-                    if (elemento.edad < min) {
-                        min = elemento.edad;
-                    }
-                    media = suma / cont;
-                    pSuma = "<p>Suma: " + suma + "</p>";
-                    pMedia = "<p>Media: " + media + "</p>";
-                    pMax = "<p>Max: " + max + "</p>";
-                    pMin = "<p>Min: " + min + "</p>";
-                    $("#resultados").html(pSuma + pMedia + pMax + pMin);
-                    $("#tabla_datos").append(nuevafila(elemento, cont));
-                }
-            )
+            let max = -Infinity;
+            let min = Infinity;
+
+            lista.forEach((elemento, index) => {
+                suma += elemento.edad;
+                if (elemento.edad > max) max = elemento.edad;
+                if (elemento.edad < min) min = elemento.edad;
+                $("#tabla_datos tbody").append(nuevafila(elemento, index + 1));
+            });
+
+            const media = lista.length > 0 ? (suma / lista.length).toFixed(2) : 0;
+            $("#resultados").html(`
+                <p>Suma: ${suma}</p>
+                <p>Media: ${media}</p>
+                <p>Máximo: ${max}</p>
+                <p>Mínimo: ${min}</p>
+            `);
         }
     </script>
-    </body>
+</body>
 </html>

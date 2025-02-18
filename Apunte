@@ -1,0 +1,169 @@
+1. Estructura Básica de un Formulario con jQuery
+
+HTML
+Formulario: Contiene campos de entrada (<input>) para que el usuario ingrese datos.
+Botón de Envío: Un botón (<button>) que activa una función cuando se hace clic.
+Contenedores: Elementos como <div> o <table> para mostrar resultados o mensajes de error.
+
+jQuery
+Eventos: Se usa .on("click", función) para asignar una función al evento de clic en un botón.
+Manipulación del DOM: Métodos como .val(), .text(), .html(), y .append() para obtener o modificar el contenido de los elementos HTML.
+
+2. Captura y Validación de Datos
+
+Captura de Datos
+- .val(): Se usa para obtener el valor de un campo de entrada (<input>).
+const nombre = $("#nombre").val();
+
+- Checkboxes: Para obtener los valores seleccionados de checkboxes:
+const hobbies = $('input[name="hobbies"]:checked').map(function () {
+    return $(this).val();
+}).get();
+
+Validación de Datos
+- Campos Vacíos: Verifica que los campos no estén vacíos.
+if (!nombre || !apellidos) {
+    alert("Por favor, completa todos los campos.");
+}
+
+- Validación de Números: Asegúrate de que un campo sea un número válido.
+if (isNaN(edad)) {
+    alert("La edad debe ser un número válido.");
+}
+
+3. Creación y Manipulación de Objetos
+
+Clases en JavaScript
+- Definición de Clases: Puedes crear una clase para estructurar los datos.
+function Fila(descripcion, idProveedor, precio) {
+    this.descripcion = descripcion;
+    this.idProveedor = idProveedor;
+    this.precio = Number.parseFloat(precio);
+}
+- Instanciación: Crea un objeto a partir de la clase.
+const obj = new Fila(descripcion, idProveedor, precio);
+
+Arrays de Objetos
+- Almacenamiento: Guarda los objetos en un array.
+let arrObj = [];
+arrObj.push(obj);
+
+4. Serialización y Deserialización
+
+Serialización
+- JSON.stringify(): Convierte un objeto JavaScript en una cadena JSON.
+const objetoSerializado = JSON.stringify(objeto);
+
+Deserialización
+- JSON.parse(): Convierte una cadena JSON en un objeto JavaScript.
+const objetoDeserializado = JSON.parse(objetoSerializado);
+
+5. Solicitudes HTTP con jQuery ($.ajax)
+
+Estructura de una Solicitud AJAX
+- URL: La dirección del servidor a la que se envía la solicitud.
+- Método: El tipo de solicitud (GET, POST, etc.).
+- Datos: Los datos que se envían al servidor (en formato JSON).
+- Respuesta: Cómo se maneja la respuesta del servidor.
+
+Ejemplo de Solicitud POST
+$.ajax({
+    url: "https://lm.iesnervion.es/reto4.php",
+    method: "POST",
+    data: JSON.stringify(objeto),
+    contentType: "application/json", // Tipo de contenido enviado
+    dataType: "json", // Tipo de respuesta esperada
+    success: function (response) {
+        console.log(response); // Manejar la respuesta exitosa
+    },
+    error: function (xhr, status, error) {
+        console.log(`Error: ${xhr.status} - ${error}`); // Manejar errores
+    }
+});
+
+Manejo de Respuestas
+- success: Se ejecuta si la solicitud es exitosa.
+- error: Se ejecuta si la solicitud falla.
+
+6. Manipulación de Tablas Dinámicas
+
+Creación de Tablas
+- Estructura HTML: Define la tabla con <table>, <thead>, y <tbody>.
+<table border id="tabla_datos">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Edad</th>
+        </tr>
+    </thead>
+    <tbody id="cuerpo"></tbody>
+</table>
+
+Agregar Filas Dinámicamente
+- .append(): Añade una nueva fila a la tabla.
+const nuevaFila = `<tr>
+                      <td>${obj.nombre}</td>
+                      <td>${obj.apellidos}</td>
+                      <td>${obj.edad}</td>
+                  </tr>`;
+$("#tabla_datos tbody").append(nuevaFila);
+
+Eliminar Filas
+- .remove(): Elimina una fila de la tabla.
+$("#fila1").remove();
+
+7. Manejo de Errores
+
+Mensajes de Error
+- Mostrar Errores: Usa un contenedor para mostrar mensajes de error.
+function controlarError(mensaje) {
+    const mensajeError = $("#mensajeError");
+    mensajeError.html(`<h2 style="color: red;">${mensaje}</h2>`);
+}
+
+Validación de Errores
+- Campos Vacíos: Verifica que los campos no estén vacíos.
+- Formato de Datos: Asegúrate de que los datos tengan el formato correcto (números, texto, etc.).
+
+8. Buenas Prácticas
+
+Uso de let y const
+- let: Para variables que pueden cambiar.
+- const: Para variables que no cambian (constantes).
+
+Limpieza de Campos
+- Después de enviar los datos, limpia los campos del formulario.
+$("#nombre, #apellidos, #edad").val("");
+
+Optimización del Código
+- Evita repetir código usando funciones reutilizables.
+- Usa try-catch para manejar errores en operaciones críticas.
+
+9. Ejemplo Completo
+
+Flujo de Trabajo
+
+- Captura de Datos: El usuario ingresa datos en el formulario.
+- Validación: Se verifica que los datos sean válidos.
+- Creación de Objetos: Los datos se estructuran en un objeto.
+- Envío al Servidor: Se envía el objeto al servidor mediante una solicitud AJAX.
+- Respuesta del Servidor: Se maneja la respuesta (éxito o error).
+- Actualización del DOM: Se muestra la respuesta en la página (tabla, mensajes de error, etc.).
+
+10. Preguntas Frecuentes
+
+- ¿Qué es JSON.stringify?
+Convierte un objeto JavaScript en una cadena JSON para enviarlo al servidor.
+
+- ¿Qué es JSON.parse?
+Convierte una cadena JSON en un objeto JavaScript para manipularlo en el código.
+
+- ¿Cómo funciona $.ajax?
+Es una función de jQuery que permite realizar solicitudes HTTP asíncronas (AJAX).
+
+- ¿Cómo se manejan los errores en jQuery?
+Usando la función error en $.ajax o bloques try-catch.
+
+- ¿Cómo se agregan filas a una tabla dinámicamente?
+Usando .append() para añadir nuevas filas al <tbody> de la tabla.

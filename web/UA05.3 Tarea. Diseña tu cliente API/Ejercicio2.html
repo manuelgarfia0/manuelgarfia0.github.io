@@ -1,11 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejercicio 2: Futbolero</title>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ejercicio 2: Furbo</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
     
-</body>
-</html>
+            .container {
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                text-align: center;
+            }
+    
+            h1 {
+                margin-bottom: 20px;
+            }
+    
+            input[type="text"] {
+                padding: 10px;
+                width: 200px;
+                margin-right: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+    
+            button {
+                padding: 10px 20px;
+                background-color: #007BFF;
+                color: #fff;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+    
+            button:hover {
+                background-color: #0056b3;
+            }
+    
+            #teamInfo {
+                margin-top: 20px;
+                text-align: left;
+            }
+    
+            #teamInfo img {
+                max-width: 200px;
+                margin-top: 10px;
+            }
+        </style>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Información de Equipos de la Premier League</h1>
+            <input type="text" id="teamName" placeholder="Ingresa el nombre del equipo">
+            <button id="searchButton">Buscar</button>
+            <div id="teamInfo"></div>
+        </div>
+    
+        <script>
+            $(document).ready(function() {
+                $('#searchButton').click(function() {
+                    const teamName = $('#teamName').val();
+                    if (teamName) {
+                        fetchTeamData(teamName);
+                    } else {
+                        alert('Por favor, ingresa el nombre de un equipo.');
+                    }
+                });
+    
+                function fetchTeamData(teamName) {
+                    const url = `https://thesportsdb.com/api/v1/json/3/searchteams.php?t=${encodeURIComponent(teamName)}`;
+    
+                    $.get(url, function(data) {
+                        if (data.teams) {
+                            displayTeamInfo(data.teams[0]);
+                        } else {
+                            $('#teamInfo').html('<p>No se encontró información para el equipo especificado.</p>');
+                        }
+                    }).fail(function(error) {
+                        console.error('Error fetching team data:', error);
+                        $('#teamInfo').html('<p>Ocurrió un error al buscar la información del equipo.</p>');
+                    });
+                }
+    
+                function displayTeamInfo(team) {
+                    const teamInfoHtml = `
+                        <h2>${team.strTeam}</h2>
+                        <p><strong>Estadio:</strong> ${team.strStadium}</p>
+                        <p><strong>Capacidad:</strong> ${team.intStadiumCapacity}</p>
+                        <p><strong>Año de Fundación:</strong> ${team.intFormedYear}</p>
+                        <p><strong>País:</strong> ${team.strCountry}</p>
+                        <p><strong>Liga:</strong> ${team.strLeague}</p>
+                        <p><strong>Descripción:</strong> ${team.strDescriptionEN}</p>
+                        <img src="${team.strTeamBadge}" alt="${team.strTeam} Badge">
+                    `;
+                    $('#teamInfo').html(teamInfoHtml);
+                }
+            });
+        </script>
+    </body>
+    </html>

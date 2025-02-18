@@ -1,11 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejercicio 3</title>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ejercicio 3: Ubicación de una Dirección IP</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
     
-</body>
-</html>
+            .container {
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                text-align: center;
+                max-width: 500px;
+                width: 100%;
+            }
+    
+            h1 {
+                margin-bottom: 20px;
+            }
+    
+            input[type="text"], textarea {
+                padding: 10px;
+                width: 100%;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+    
+            button {
+                padding: 10px 20px;
+                background-color: #007BFF;
+                color: #fff;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+    
+            button:hover {
+                background-color: #0056b3;
+            }
+    
+            #ipInfo {
+                margin-top: 20px;
+                text-align: left;
+            }
+    
+            #map {
+                margin-top: 20px;
+                height: 200px;
+                width: 100%;
+                border-radius: 8px;
+                border: 1px solid #ccc;
+            }
+        </style>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Ubicación de una Dirección IP</h1>
+            <input type="text" id="ipAddress" placeholder="Ingresa una dirección IP">
+            <textarea id="jsonInput" placeholder="O ingresa un JSON con direcciones IP (ejemplo: { 'ips': ['8.8.8.8', '1.1.1.1'] })"></textarea>
+            <button id="searchButton">Buscar</button>
+            <div id="ipInfo"></div>
+            <div id="map"></div>
+        </div>
+    
+        <script>
+            // Reemplaza con tu API Key de ipgeolocation.io
+            const API_KEY = 'TU_API_KEY_AQUI';
+    
+            $(document).ready(function() {
+                $('#searchButton').click(function() {
+                    const ipAddress = $('#ipAddress').val();
+                    const jsonInput = $('#jsonInput').val();
+    
+                    if (ipAddress) {
+                        fetchIPData(ipAddress);
+                    } else if (jsonInput) {
+                        try {
+                            const jsonData = JSON.parse(jsonInput);
+                            if (jsonData.ips && Array.isArray(jsonData.ips)) {
+                                jsonData.ips.forEach(ip => fetchIPData(ip));
+                            } else {
+                                alert('El JSON debe contener un array de direcciones IP bajo la clave "ips".');
+                            }
+                        } catch (error) {
+                            alert('El JSON ingresado no es válido.');
+                        }
+                    } else {
+                        alert('Por favor, ingresa una dirección IP o un JSON válido.');
+                    }
+                });
+    
+                function fetchIPData(ipAddress) {
+                    const url = `https://api.ipgeolocation.io/ipgeo?apiKey=${API_KEY}&ip=${ipAddress}`;
+    
+                    $.get(url, function(data) {
+                        if (data.ip) {
+                            displayIPInfo(data);
+                            displayMap(data.latitude, data.longitude);
+                        } else {
+                            $('#ipInfo').append('<p>No se encontró información para la dirección IP especificada.</p>');
+                        }
+                    }).fail(function(error) {
+                        console.error('Error fetching IP data:', error);
+                        $('#ipInfo').append('<p>Hubo un error al obtener los datos de la dirección IP.</p>');
+                    });
+                }
+    
+                function displayIPInfo(info) {
+                    const ipInfoHtml = `
+                        <div style="margin-bottom: 20px;">
+                            <p><strong>IP:</strong> ${info.ip}</p>
+                            <p><strong>País:</strong> ${info.country_name}</p>
+                            <p><strong>Ciudad:</strong> ${info.city}</p>
+                            <p><strong>Región:</strong> ${info.state_prov}</p>
+                            <p><strong>Código Postal:</strong> ${info.zipcode}</p>
+                            <p><strong>Latitud:</strong> ${info.latitude}</p>
+                            <p><strong>Longitud:</strong> ${info.longitude}</p>
+                            <p><strong>Proveedor de Internet:</strong> ${info.isp}</p>
+                        </div>
+                    `;
+                    $('#ipInfo').append(ipInfoHtml);
+                }
+    
+                function displayMap(latitude, longitude) {
+                    const mapHtml = `
+                        <iframe
+                            width="100%"
+                            height="200"
+                            frameborder="0"
+                            style="border:0"
+                            src="https://www.google.com/maps/embed/v1/view?key=TU_GOOGLE_MAPS_API_KEY&center=${latitude},${longitude}&zoom=15"
+                            allowfullscreen>
+                        </iframe>
+                    `;
+                    $('#map').html(mapHtml);
+                }
+            });
+        </script>
+    </body>
+    </html>

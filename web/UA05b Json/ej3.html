@@ -43,17 +43,17 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         let lista = [];
-    
+
         $("#enviar").click(function () {
             let nombre = $("#nombre").val();
             let apellidos = $("#apellidos").val();
             let edad = $("#edad").val();
             let ciudad = $("#ciudad").val();
             let hobbies = $('input[name="hobbies"]:checked')
-            .map(function () {
-                return $(this).val();
-            })
-            .get();
+                .map(function () {
+                    return $(this).val();
+                })
+                .get();
             let obj = {
                 "nombre": nombre,
                 "apellidos": apellidos,
@@ -63,49 +63,50 @@
             }
             lista.push(obj);
             simulacro();
-            envio(obj);
+            envio(obj); // Envía el objeto a la API
         });
-    
+
         function simulacro() {
             let lista_serializada = serializar(lista);
             let lista_NOserializada = deserializar(lista_serializada)
             generaTabla(lista_NOserializada);
         }
-    
+
         function serializar(objeto) {
             return JSON.stringify(objeto);
         }
-    
+
         function deserializar(objJson) {
             return JSON.parse(objJson);
         }
-    
+
         function creaTabla() {
-            let tabla = "<table border='1' id='tabla_datos'>" +
-                "<thead>" +
-                "<tr>" +
-                "<th>Nombre</th>" +
-                "<th>Apellidos</th>" +
-                "<th>Edad</th>" +
-                "<th>Ciudad</th>" +
-                "<th>Hobbies</th>" +
-                "</tr>" +
-                "</thead>";
-            tabla += "<tbody id='cuerpo'></tbody>";
-            tabla += "</table>";
-            return tabla
+            return `
+                <table border='1' id='tabla_datos'>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellidos</th>
+                            <th>Edad</th>
+                            <th>Ciudad</th>
+                            <th>Hobbies</th>
+                        </tr>
+                    </thead>
+                    <tbody id='cuerpo'></tbody>
+                </table>
+            `;
         }
-    
+
         function nuevafila(obj, idObjeto) {
             return "<tr id='" + idObjeto + "' onclick='eliminarTR(this.id)'><td>" + obj.nombre + "</td><td>" + obj.apellidos + "</td><td>" + obj.edad + "</td><td>" + obj.ciudad + "</td><td>" + obj.hobbies + "</td></tr>";
         }
-    
+
         function eliminarTR(idTR) {
-            lista.splice(idTR, 1);
-            $("#" + idTR).remove();
-            simulacro();
+            lista.splice(idTR, 1); // Elimina el elemento de la lista
+            $("#" + idTR).remove(); // Elimina la fila de la tabla
+            simulacro(); // Regenera la tabla
         }
-    
+
         function generaTabla(lista) {
             let tabla = creaTabla();
             $("#tabla").html(tabla);
@@ -114,7 +115,7 @@
             let cont = 0;
             let max = 0;
             let min = 999;
-            
+
             lista.forEach(function (elemento) {
                 let edad = parseInt(elemento.edad);
                 if (!isNaN(edad)) {
@@ -136,39 +137,40 @@
                 $("#tabla_datos").append(nuevafila(elemento, index));
             });
         }
+
         function solicitud() {
             const xhr = new XMLHttpRequest();
             xhr.open("GET", "https://jsonplaceholder.typicode.com/users");
             xhr.responseType = "json";
-            
+
             xhr.onload = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
                     const data = xhr.response;
                     console.log(data);
+                    // Procesa los datos y añádelos a la tabla si es necesario
                 } else {
                     console.log("Error: " + xhr.status);
                 }
             };
+
             xhr.send();
         }
 
-        function envio(objeto_js){
+        function envio(objeto_js) {
             const xhr = new XMLHttpRequest();
-   	        xhr.open("POST", "https://jsonplaceholder.typicode.com/posts");
-	        xhr.responseType = "json"; // Si no se indica, necesitará parseo
+            xhr.open("POST", "https://jsonplaceholder.typicode.com/posts");
+            xhr.responseType = "json";
 
-            // Preparamos a continuación la respuesta
-   	        xhr.onload = function() {
-       	        if (xhr.readyState == 4 && xhr.status == 201) { // 200 || 201
-           	        console.log(xhr.response);
-       	        } else {
-           	        console.log("Error: ${xhr.status}");
-       	        }
-   	        };
+            xhr.onload = function () {
+                if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201)) {
+                    console.log(xhr.response);
+                } else {
+                    console.log("Error: " + xhr.status);
+                }
+            };
+
             xhr.send(JSON.stringify(objeto_js));
         }
-
-
     </script>
-    </body>
+</body>
 </html>

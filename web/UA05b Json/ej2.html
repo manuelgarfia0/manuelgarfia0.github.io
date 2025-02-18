@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ejercicio 2: Insertar datos dinámicos</title>
+    <!-- Incluir jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <label for="nombre">Nombre:</label>
@@ -29,49 +31,57 @@
             <th>Ciudad</th>
         </tr>
     </table>
+
     <script>
-        function serializar(obj){
-        return JSON.stringify(obj);
-    }
-    function deserializar(obj){
-        return JSON.parse(obj)
-    }
-    const objeto = {
-        nombre: "Sarsisha",
-        apellido : "Franfur",
-        edad: 21,
-        ciudad : "Granada"
-    }
-    
-    $("#nombre").text(objeto.nombre);
-    $("#apellido").text(objeto.apellido);
-    $("#edad").text(objeto.edad);
-    $("#ciudad").text(objeto.ciudad);
+        // Función para serializar un objeto en formato JSON
+        function serializar(obj) {
+            return JSON.stringify(obj);
+        }
 
-    const objeto_ser = serializar(objeto);
-    console.log(objeto_ser);
+        // Función para deserializar un JSON a un objeto
+        function deserializar(json) {
+            return JSON.parse(json);
+        }
 
-    const obj_rec = deserializar(objeto_ser);
-    console.log(obj_rec);
+        // Contador para el índice de las filas
+        let indice = 1;
 
-    $("#texto").text=texto;//Jquery
+        // Evento para el botón "Enviar"
+        $("#enviar").click(function () {
+            // Obtener valores de los campos
+            const nombre = $("#nombre").val();
+            const apellidos = $("#apellidos").val();
+            const edad = $("#edad").val();
+            const ciudad = $("#ciudad").val();
 
-    let objJson = {
-        nombre: $("#nombre").val(),
-        apellidos: $("#apellidos").val(),
-        edad: $("#edad").val(),
-        ciudad: $("#ciudad").val(),
-    };
+            // Validar que todos los campos estén llenos
+            if (nombre && apellidos && edad && ciudad) {
+                // Crear una nueva fila
+                const nuevaFila = `
+                    <tr>
+                        <td>${indice}</td>
+                        <td>${nombre}</td>
+                        <td>${apellidos}</td>
+                        <td>${edad}</td>
+                        <td>${ciudad}</td>
+                    </tr>
+                `;
 
-    // Objeto JavaScript a JSON
-    const json_serializado = serializar(objJson);
+                // Agregar la fila a la tabla
+                $("#objeto").append(nuevaFila);
 
-    // JSON a objeto JavaScript
-    const objeto_recuperado = deserializar(json_serializado);
+                // Incrementar el índice
+                indice++;
 
-    console.log(objJson);
-    console.log(json_serializado);
-    console.log(objeto_recuperado);
+                // Limpiar los campos del formulario
+                $("#nombre").val("");
+                $("#apellidos").val("");
+                $("#edad").val("");
+                $("#ciudad").val("");
+            } else {
+                alert("Por favor, completa todos los campos.");
+            }
+        });
     </script>
 </body>
 </html>
