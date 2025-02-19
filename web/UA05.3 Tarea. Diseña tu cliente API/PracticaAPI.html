@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Practica API</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
+            h1, h2 {
+                text-align: center;
+            }
+            .stats {
+                margin-top: 20px;
+            }
+            .stats p {
+                font-weight: bold;
+            }
+            .word-list {
+                margin-top: 20px;
+            }
+            .word-list ul {
+                list-style-type: none;
+                padding: 0;
+            }
+            .word-list li {
+                background-color: #f0f0f0;
+                margin: 5px 0;
+                padding: 10px;
+                border-radius: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Palabras Aleatorias</h1>
+        <h2>Manuel Garfia Castro</h2>
+    
+        <label for="wordCount">Número de palabras:</label>
+        <input type="number" id="wordCount" name="wordCount" min="1" value="1">
+        <button id="newWordButton">Nueva palabra</button>
+    
+        <div class="stats">
+            <p>A: <span id="countA">0</span></p>
+            <p>E: <span id="countE">0</span></p>
+            <p>I: <span id="countI">0</span></p>
+            <p>O: <span id="countO">0</span></p>
+            <p>U: <span id="countU">0</span></p>
+            <p>Consonantes: <span id="countConsonants">0</span></p>
+            <p>Palabra más larga: <span id="longestWord">N/A</span></p>
+            <p>Palabra más corta: <span id="shortestWord">N/A</span></p>
+        </div>
+    
+        <div class="word-list">
+            <ul id="wordList"></ul>
+        </div>
+    
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script>
+            let words = [];
+            let countA = 0, countE = 0, countI = 0, countO = 0, countU = 0, countConsonants = 0;
+            let longestWord = "", shortestWord = "";
+    
+            // Función para actualizar las estadísticas
+            function updateStats() {
+                $("#countA").text(countA);
+                $("#countE").text(countE);
+                $("#countI").text(countI);
+                $("#countO").text(countO);
+                $("#countU").text(countU);
+                $("#countConsonants").text(countConsonants);
+                $("#longestWord").text(longestWord);
+                $("#shortestWord").text(shortestWord);
+            }
+    
+            // Función para obtener palabras aleatorias
+            function getRandomWords(count) {
+                $.ajax({
+                    url: ` https://random-word-api.herokuapp.com/word?number=${count}`,
+                    type: 'GET',
+                    success: function(response) {
+                        response.forEach(word => {
+                            words.push(word);
+                            if (word.length > longestWord.length) {
+                                longestWord = word;
+                            }
+                            if (shortestWord === "" || word.length < shortestWord.length) {
+                                shortestWord = word;
+                            }
+                            switch (word[0].toLowerCase()) {
+                                case 'a': countA++; break;
+                                case 'e': countE++; break;
+                                case 'i': countI++; break;
+                                case 'o': countO++; break;
+                                case 'u': countU++; break;
+                                default: countConsonants++; break;
+                            }
+                        });
+                        words.sort();
+                        displayWords();
+                        updateStats();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error en la solicitud:", error);
+                    }
+                });
+            }
+    
+            // Función para mostrar las palabras en la lista
+            function displayWords() {
+                let wordList = $("#wordList");
+                wordList.empty();
+                words.forEach(word => {
+                    wordList.append(`<li>${word}</li>`);
+                });
+            }
+    
+            // Evento para el botón de nueva palabra
+            $("#newWordButton").click(function () {
+                let count = $("#wordCount").val();
+                getRandomWords(count);
+            });
+        </script>
+    </body>
+    </html>
