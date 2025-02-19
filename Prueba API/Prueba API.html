@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen API: EL CHAT</title>
+</head>
+<style>
+    body {
+        font-family: Arial;
+        margin: 20px;
+    }
+    h1, h2 {
+        text-align: center;
+    }
+</style>
+
+<body>
+    <h1>EL CHAT</h1>
+    <h2>Manuel Garfia Castro</h2>
+    <form>
+        <label for="nombre">Nombre: </label>
+        <input id="nombre"></input>
+
+        <label for="apellidos">Apellidos: </label>
+        <input id="apellidos"></input>
+
+        <label for="mensaje">Mensaje: </label>
+        <input id="mensaje"></input>
+
+        <br><br>
+
+        <button id="enviar">Enviar</button>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            // Selecciona el botón de enviar y añade un evento de clic
+            const enviar = document.querySelector("#enviar");
+            enviar.addEventListener("click", cogerInfo);
+            let arrObj = [];
+
+            // Constructor para crear un objeto Fila
+            function Fila(nombre, apellidos, id, mensaje, hora){
+                this.nombre = nombre;
+                this.apellidos = apellidos;
+                this.id = id;
+                this.mensaje = mensaje;
+                this.hora = hora;
+            }
+
+            // Función para generar un ID aleatorio
+            function generarID() {
+                return Math.random().toString(36).substr(2, 9);
+            }
+
+            // Función para obtener la hora actual en formato HH:MM:SS
+            function obtenerHora() {
+                let fecha = new Date();
+                return fecha.toTimeString().split(' ')[0];
+            }
+
+            // Función que se ejecuta al hacer clic en el botón de enviar
+            function cogerInfo(event){
+                event.preventDefault();
+                let idGenerado = generarID();
+                let horaActual = obtenerHora();
+                $("#id").val(idGenerado);
+
+                // Crea un nuevo objeto Fila con los valores del formulario
+                let objJson = new Fila($("#nombre").val(),     	
+                    $("#apellidos").val(),
+                    idGenerado,
+                    $("#mensaje").val(),
+                    horaActual);
+
+                arrObj.push(objJson); // Añade el objeto al array
+                console.log(arrObj); // Muestra el array en la consola
+                envio(objJson); // Envía el objeto al servidor
+
+                // Deshabilita los campos de nombre y apellidos
+                $("#nombre").prop("disabled", true);
+                $("#apellidos").prop("disabled", true);
+            }
+
+            // Función para enviar el objeto al servidor mediante AJAX
+            function envio(objeto_js) {
+			    $.ajax({
+			        url: "https://lm.iesnervion.es/chat.php",
+			        method: "POST",
+			        data: JSON.stringify(objeto_js),
+			        contentType: "application/json", // Especifica el tipo de contenido
+			        dataType: "json", // La respuesta será interpretada como JSON
+			        success: function(response) {
+			            console.log(response);
+			            controlarError(response.error);
+			        },
+			        error: function(xhr, status, error) {
+			            console.log(`Error: ${xhr.status} - ${error}`);
+			        }
+			    });
+			}
+
+            // Función para controlar errores en la respuesta del servidor
+            function controlarError(error) {
+                if (error) {
+                    console.error("Error:", error); // Muestra el error en la consola
+                } else {
+                    console.log("Mensaje enviado correctamente"); // Muestra un mensaje de éxito en la consola
+                }
+            }
+        });
+    </script>
+</body>
+</html>
