@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejemplo MVC</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="modelo.js"></script>
+    <script src="view.js"></script>
+    <script src="controller.js"></script>
+</head>
+<body>
+    <input type="text" id="item-input" placeholder="Add an item">
+    <button id="add-item-button">Add</button>
+    <ul id="item-list"></ul>
+    
+    <script>
+    $(document).ready(() => {
+        Controller.init();
+    });
+    </script>
+</body>  
+</html>

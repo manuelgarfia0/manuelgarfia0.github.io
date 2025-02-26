@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejemplo MVC 2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Lista de Tareas</h1>
+    <input type="text" id="taskInput" placeholder="Nueva tarea">
+    <button id="addTaskButton">Añadir</button>
+    <ul id="taskList"></ul>
+
+    <script src="model.js"></script>
+    <script src="view.js"></script>
+    <script src="controller.js"></script>
+    <script>
+        const model = new TaskModel();
+        const view = new TaskView();
+        const controller = new TaskController(model, view);
+    </script>
+</body>
+</html>
