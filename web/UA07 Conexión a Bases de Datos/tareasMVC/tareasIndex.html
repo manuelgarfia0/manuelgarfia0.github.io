@@ -9,14 +9,19 @@
 <body>
     <h2>Lista de tareas</h2>
     <input type="text" id="taskInput" placeholder="Nueva tarea">
+    <input type="date" id="taskDate">
     <button id="addTaskButton">Añadir</button>
     <ul id="taskList"></ul>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="tareasController.js"></script>
     <script src="tareasModel.js"></script>
     <script src="tareasView.js"></script>
+    <script src="tareasController.js"></script>
     <script>
-
+        $(document).ready(() => {
+            const model = new Tareas();
+            const view = new TareasView();
+            const controller = new TareasController(model, view);
+        });
     </script>
 </body>
 </html>

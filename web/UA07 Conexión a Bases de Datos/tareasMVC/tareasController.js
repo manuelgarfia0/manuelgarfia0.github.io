@@ -1,21 +1,19 @@
-class tareasController{
-    constructor(){
-        this.tareasModel = new tareasModel();
+class TareasController {
+    constructor(model, view) {
+        this.model = model;
+        this.view = view;
+
+        this.view.bindAddTask(this.handleAddTask.bind(this));
+        this.view.bindDeleteTask(this.handleDeleteTask.bind(this));
     }
 
-    getTareas(){
-        return this.tareasModel.getTareas();
+    handleAddTask(descripcion, fecha) {
+        const tarea = this.model.setTarea(descripcion, fecha);
+        this.view.addTaskToList(tarea);
     }
 
-    addTarea(tarea){
-        this.tareasModel.addTarea(tarea);
-    }
-
-    deleteTarea(id){
-        this.tareasModel.deleteTarea(id);
-    }
-
-    updateTarea(id, tarea){
-        this.tareasModel.updateTarea(id, tarea);
+    handleDeleteTask(id) {
+        this.model.removeTarea(id);
+        this.view.removeTaskFromList(id);
     }
 }
