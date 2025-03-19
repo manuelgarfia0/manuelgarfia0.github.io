@@ -18,7 +18,7 @@ class TareasView {
     addTaskToList(tarea) {
         const taskItem = $(`
             <li id="task-${tarea.id}">
-                ${tarea.descripcion} - ${tarea.fecha}
+                ${tarea.id}. ${tarea.descripcion} --> ${tarea.fecha}
                 <button class="deleteButton" data-id="${tarea.id}">Eliminar</button>
             </li>
         `);
