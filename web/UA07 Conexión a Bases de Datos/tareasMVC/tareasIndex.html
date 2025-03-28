@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tareas MVC</title>
+    <title>Gestión de Tareas - MVC</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,14 +13,15 @@
     <button id="addTaskButton">Añadir</button>
     <ul id="taskList"></ul>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="tareasEntity.js"></script>
     <script src="tareasModel.js"></script>
     <script src="tareasView.js"></script>
     <script src="tareasController.js"></script>
     <script>
         $(document).ready(() => {
-            const model = new Tareas();
-            const view = new TareasView();
-            const controller = new TareasController(model, view);
+            const modelo = new TareasModel();
+            const vista = new TareasView();
+            const controlador = new TareasController(modelo, vista);
         });
     </script>
 </body>

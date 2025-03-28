@@ -1,48 +1,56 @@
 class TareasView {
     constructor() {
-        this.taskList = $('#taskList');
+        this.listaTareas = $('#taskList'); // Lista de tareas en el DOM
     }
 
-    getInputData() {
+    // Obtener los datos de entrada del formulario
+    obtenerDatosEntrada() {
         return {
             descripcion: $('#taskInput').val(),
             fecha: $('#taskDate').val()
         };
     }
 
-    clearInputFields() {
+    // Limpiar los campos de entrada del formulario
+    limpiarCamposEntrada() {
         $('#taskInput').val('');
         $('#taskDate').val('');
     }
 
-    addTaskToList(tarea) {
-        const taskItem = $(`
-            <li id="task-${tarea.id}">
-                ${tarea.id}. ${tarea.descripcion} --> ${tarea.fecha}
-                <button class="deleteButton" data-id="${tarea.id}">Eliminar</button>
+    // Añadir una tarea a la lista en la vista
+    añadirTareaALista(tarea) {
+        const elementoTarea = $(`
+            <li id="task-${tarea.getId()}">
+                <span>${tarea.getId()}. ${tarea.getDescripcion()} --> ${tarea.getFecha()}</span>
+                <button class="deleteButton" data-id="${tarea.getId()}">Eliminar</button>
             </li>
         `);
-        this.taskList.append(taskItem);
+        this.listaTareas.append(elementoTarea);
     }
 
-    removeTaskFromList(id) {
+    // Eliminar una tarea de la lista en la vista
+    eliminarTareaDeLista(id) {
         $(`#task-${id}`).remove();
     }
 
-    bindAddTask(handler) {
+    // Vincular el evento de añadir tarea con un manejador
+    vincularAñadirTarea(manejador) {
         $('#addTaskButton').click(() => {
-            const { descripcion, fecha } = this.getInputData();
+            const { descripcion, fecha } = this.obtenerDatosEntrada();
             if (descripcion && fecha) {
-                handler(descripcion, fecha);
-                this.clearInputFields();
+                manejador(descripcion, fecha); // Llamar al controlador
+                this.limpiarCamposEntrada(); // Limpiar los campos de entrada
+            } else {
+                alert('Por favor, completa todos los campos.');
             }
         });
     }
 
-    bindDeleteTask(handler) {
-        this.taskList.on('click', '.deleteButton', (event) => {
-            const id = $(event.target).data('id');
-            handler(id);
+    // Vincular el evento de eliminar tarea con un manejador
+    vincularEliminarTarea(manejador) {
+        this.listaTareas.on('click', '.deleteButton', (event) => {
+            const id = $(event.target).data('id'); // Obtener el ID de la tarea
+            manejador(id); // Llamar al controlador
         });
     }
 }
